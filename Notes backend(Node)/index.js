@@ -7,6 +7,8 @@ app.use(express.json())
 const cors = require('cors')
 app.use(cors());
 
+//to show static content brought with dist folder
+app.use(express.static('dist'))
 
 // const app = http.createServer((request, response) => {
 //   response.writeHead(200, { 'Content-Type': 'application/json' })
