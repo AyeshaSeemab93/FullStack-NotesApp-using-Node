@@ -4,6 +4,7 @@ const express = require('express')
 const app = express();
 //for posting (json parser: to access the raw data sent with req)
 app.use(express.json())
+//to connect frontend + backend to 1 place
 const cors = require('cors')
 app.use(cors());
 
@@ -18,18 +19,19 @@ app.use(express.static('dist'))
 let notes = [
   {
     id: 1,
-    content: "HTML is easy",
+    content: "HTML backend indexedDB.js easy",
     important: true
   },
   {
     id: 2,
-    content: "Browser can execute only JavaScript",
+  
+    content: "backend indexedDB.js,Browser can execute only JavaScript",
     important: false
   },
   
   {
     id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol",
+    content: "backend indexedDB.js,GET and POST are the most important methods of HTTP protocol",
     important: true
   }
 ]
