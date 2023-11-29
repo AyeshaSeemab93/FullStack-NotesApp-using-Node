@@ -1,17 +1,24 @@
-// const http = require('http') instaead we use express now
+// const http = require('http') instead we use express now
 const express = require('express')
 const app = express(); //creating server
-app.use(express.json()) //for posting (json parser: to access the raw data sent with req)
-
 const cors = require('cors')  //to connect frontend + backend to 1 place
-app.use(cors());
-
-app.use(express.static('dist')) //to show static content brought with dist folder
-
+require('dotenv').config()
 //importing note database module (Note is modelName)
 const Note = require('./Models/note.js');
-require('dotenv').config()
- 
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(express.json()) //for posting (json parser: to access the raw data sent with req)
+app.use(cors());
+app.use(express.static('dist')) //to show static content brought with dist folder
+app.use(requestLogger)
+
 let notes = [
     {
       id: 1,
@@ -52,10 +59,10 @@ let notes = [
           console.error('Error saving notes:', error);
         });
 
-app.get('/', (req, res)=>{
-  console.log('request received');
-  res.send('<h1>Hello World! Welcome to notes(Node-Express part 3)</h1>')
-})
+// app.get('/', (req, res)=>{
+//   console.log('request received');
+//   res.send('<h1>Hello World! Welcome to notes(Node-Express part 3)</h1>')
+// })
 
 app.get('/api/notes', (req, res)=>{
   console.log('request for all notes');
