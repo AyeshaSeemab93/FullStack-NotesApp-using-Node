@@ -63,6 +63,10 @@ let notes = [
 //   console.log('request received');
 //   res.send('<h1>Hello World! Welcome to notes(Node-Express part 3)</h1>')
 // })
+app.get('/', (req, res)=>{
+  console.log('request received');
+  res.send('<h1>Hello World! Welcome to notes(Node-Express part 3)</h1>')
+})
 
 app.get('/api/notes', (req, res)=>{
   console.log('request for all notes');
