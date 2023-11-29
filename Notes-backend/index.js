@@ -7,36 +7,11 @@ const cors = require('cors')  //to connect frontend + backend to 1 place
 app.use(cors());
 
 app.use(express.static('dist')) //to show static content brought with dist folder
-const mongoose = require("mongoose") //to communicate with mongoDB database
 
- //ask for password in terminal
-if(process.argv.length <3){
-  console.log("give password as argument");
-  process.exit;
-}
-const password = process.argv[2];
-
-//connect to mongoDB
-const url = `mongodb+srv://Ayesha:${password}@cluster0.ekh6jf2.mongodb.net/databaseName?retryWrites=true&w=majority`;
-mongoose.set('strictQuery', false)  // Set 'strictQuery' to false, relaxing query validation
-mongoose.connect(url);
-
-//create schema(design of data)
-const noteSchema = new mongoose.Schema({
-content: String,
-important: Boolean,
-});
-// this step is to delete _id(object) and create id(string) from _id before converting to json
-noteSchema.set('toJSON',{
-  transform: (document, returnedObject) =>{
-    returnedObject.id = document._id.toString();
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-//create model(name of table, design to store)
-const Note = mongoose.model('Note', noteSchema);
-
+//importing note database module (Note is modelName)
+const Note = require('./Models/note.js');
+require('dotenv').config()
+ 
 let notes = [
     {
       id: 1,
@@ -150,7 +125,7 @@ app.post('/api/notes', (request, response) => {
 
 
 //running the servere (for fly.io, render deploying)
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 
 app.listen(PORT, ()=>{
   console.log(`Server running on port ${PORT}`)
