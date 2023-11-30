@@ -22,19 +22,19 @@ app.use(requestLogger)
 let notes = [
     {
       id: 1,
-      content: "HTML backend indexedDB.js easy",
+      content: "HTML is easy",
       important: true
     },
     {
       id: 2,
     
-      content: "backend indexedDB.js,Browser can execute only JavaScript",
+      content: "Browser can execute only JavaScript",
       important: false
     },
     
     {
       id: 3,
-      content: "backend indexedDB.js,GET and POST are the most important methods of HTTP protocol",
+      content: "GET and POST are the most important methods of HTTP protocol",
       important: true
     }
 ];

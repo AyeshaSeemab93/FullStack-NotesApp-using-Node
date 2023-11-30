@@ -4,7 +4,7 @@ require('dotenv').config();
 //connect to mongoDB
 const url = process.env.MONGODB_URI;
 mongoose.set('strictQuery', false)  // Set 'strictQuery' to false, relaxing query validation
-mongoose.connect(url)
+mongoose.connect('url')
   .then(result=>{
     console.log("connected to MongoDB", url);
   })
