@@ -2,21 +2,25 @@ const mongoose = require("mongoose") //to communicate with mongoDB database
 require('dotenv').config();
 
 //connect to mongoDB
-const url = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 mongoose.set('strictQuery', false)  // Set 'strictQuery' to false, relaxing query validation
-mongoose.connect('url')
+mongoose.connect(uri)
   .then(result=>{
-    console.log("connected to MongoDB", url);
+    console.log("connected to MongoDB", uri);
   })
   .catch(error=>{
-    console.log("unable to connect", error.message)
+    console.log("unable to connect.Message: ", error.message)
   })
 
 //create schema(design of data)
 const noteSchema = new mongoose.Schema({
-content: String,
-important: Boolean,
-});
+  content: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
+  important: Boolean
+})
 // this step is to delete _id(object) and create id(string) from _id before converting to json
 noteSchema.set('toJSON',{
   transform: (document, returnedObject) =>{
