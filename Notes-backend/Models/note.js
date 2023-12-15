@@ -16,10 +16,10 @@ mongoose.connect(uri)
 const noteSchema = new mongoose.Schema({
   content: {
     type: String,
-    minLength: 5,
+    minlength: 5,
     required: true
   },
-  important: Boolean
+  important: Boolean,
 })
 // this step is to delete _id(object) and create id(string) from _id before converting to json
 noteSchema.set('toJSON',{

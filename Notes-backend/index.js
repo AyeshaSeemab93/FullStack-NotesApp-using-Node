@@ -14,11 +14,6 @@ const requestLogger = (req, res, next)=>{
   next();
   }
 
-app.use(express.json()) //for posting (json parser: to access the raw data    sent with req by client)
-app.use(cors());
-app.use(express.static('dist')) //to show static content brought with dist folder
-app.use(requestLogger); //should be after parsing else body is undefined
-//Middleware to handle errors.
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
@@ -28,7 +23,6 @@ const errorHandler = (error, request, response, next) => {
   else if(error.name === 'ValidationError'){
     return response.status(400).json({error: error.message})
   }
-
   next(error)
 }
 //middleware to handle wrong link address
@@ -36,6 +30,11 @@ const unknownEndpoint =(req, res)=>{
   return res.status(404).send({error: 'Unknown Endpoint!' })
 }
 
+  
+app.use(express.json()) //for posting (json parser: to access the raw data    sent with req by client)
+app.use(cors());
+app.use(express.static('dist')) //to show static content brought with dist folder
+app.use(requestLogger); //should be after parsing else body is undefined
 
 let notes = [
     // {
@@ -82,6 +81,7 @@ app.post('/api/notes', (request, response, next) => {
   const note = new Note({
     content: body.content,
     important: body.important || false,
+    date: new Date(),
   })
   console.log(note)
   // notes.concat(note) //add note to local list
@@ -109,17 +109,18 @@ app.delete('/api/notes/:id', (request, response, next) => {
 //TOGGLE IMPORTANCE(put request is coming from client=>UI interface=>frontend code=>axious send put req=> backend here=>put req rec by express library)
 app.put('/api/notes/:id', (req, res, next)=>{
   const id = req.params.id;
-  const body = req.body;
-  //create new copy of coming note 
+  const body = req.body //or const {content, important} = req.body
+  // create new copy of coming note 
   const note = {
     content: body.content,
     important: body.important
   }
   // updating note in mongooseDb
-  Note.findByIdAndUpdate(id, note, {new: true}) //{new: true} so the event handler use the new note,not the original one
+  Note.findByIdAndUpdate(id,note, {new: true, runValidators: true, context: 'query'}) //{new: true} so the event handler use the new note,not the original one
       .then(updatedNote => res.json(updatedNote))
       .catch(error=> next(error))
 })
+
 
 
 
@@ -131,5 +132,4 @@ const PORT = process.env.PORT
 
 app.listen(PORT, ()=>{
   console.log(`Server running on port ${PORT}`)
-
 });
